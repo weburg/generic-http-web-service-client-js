@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JS+HTML Generic HTTP WS Client</title>
+    <link rel="stylesheet" href="css/main.css">
+    <script type="text/javascript" src="js/weburg/ghowst/http-web-service-invoker.js"></script>
+    <script type="text/javascript" src="js/weburg/ghowst/generic-http-web-service-client.js"></script>
+
+    <script>
+        var httpWebService = createGenericHttpWebServiceClient("http://localhost:8081/generichttpws");
+
+        /*** Photo ***/
+
+        // Create
+        function handlePhotoUpload(files) {
+            var photo = {
+                caption: "Some JS K",
+                photoFile: files[0]
+            }
+            httpWebService.createPhotos(photo);
+        }
+
+        /*** Engine ***/
+
+        // Create
+        var engine = {
+            name: "JSEngine",
+            cylinders: 44,
+            throttleSetting: 49
+        }
+        var engineId1 = httpWebService.createEngines(engine);
+
+        // CreateOrReplace (which will create)
+        var engine = {
+            id: -1,
+            name: "JSEngineCreatedNotReplaced",
+            cylinders: 45,
+            throttleSetting: 50
+        }
+        httpWebService.createOrReplaceEngines(engine);
+
+        // Prepare for CreateOrReplace
+        var engine = {
+            name: "JSEngine2",
+            cylinders: 44,
+            throttleSetting: 49
+        }
+        var engineId2 = httpWebService.createEngines(engine);
+
+        // CreateOrReplace (which will replace)
+        var engine = {
+            id: engineId2,
+            name: "JSEngine2Replacement",
+            cylinders: 56,
+            throttleSetting: 59
+        }
+        httpWebService.createOrReplaceEngines(engine);
+
+        // Prepare for Update
+        var engine = {
+            name: "JSEngine3",
+            cylinders: 44,
+            throttleSetting: 49
+        }
+        var engineId3 = httpWebService.createEngines(engine);
+
+        // Update
+        var engine = {
+            id: engineId3,
+            name: "JSEngine3Updated",
+        }
+        httpWebService.updateEngines(engine);
+
+        // Get
+        var engine = httpWebService.getEngines(engineId1);
+        console.log("Engine returned: " + engine.name);
+
+        // Get all
+        var engines = httpWebService.getEngines();
+        console.log("Engines returned: " + engines.length);
+
+        // Prepare for delete
+        var engine = {
+            name: "JSEngine4ToDelete",
+            cylinders: 89,
+            throttleSetting: 70
+        }
+        var engineId4 = httpWebService.createEngines(engine);
+
+        // Delete
+        httpWebService.deleteEngines(engineId4);
+
+        // Custom verb
+        httpWebService.restartEngines(engineId2);
+    </script>
+</head>
+
+<body>
+<h1>JS+HTML Generic HTTP WS Client</h1>
+
+<p>View console for client calls to the Web service.</p>
+
+<p>To trigger createPhoto: <input type="file" name="photoFile" onchange="handlePhotoUpload(this.files)"></p>
+</body>
+</html>

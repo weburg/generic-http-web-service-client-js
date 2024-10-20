@@ -2,7 +2,7 @@
 
 // Thin wrapper for stubless client
 function createGenericHttpWebServiceClient(baseUrl) {
-    var handler = {
+    let handler = {
         get: function(target, name) {
             return function() {
                 return target(name, Array.prototype.slice.call(arguments), baseUrl);

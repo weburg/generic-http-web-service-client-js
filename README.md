@@ -11,13 +11,16 @@
   local objects.
 
 > [!NOTE]
-> This JavaScript project is meant to run in a browser. It doesn't use ES6
-> modules, and it uses XHR instead of the Fetch API. However, with changes, it
-> should run in Node.js without too much effort and still work in a browser.
+> This JavaScript project is meant to run in a browser. It uses XHR instead of
+> the Fetch API for now. However, once using the Fetch API, or with an XHR
+> wrapper, it should run in Node.js without too much effort and still work in a
+> browser. As of this writing, Node.js's stable Fetch support isn't ubiquitous.
 
 ### Example code
 
 ```js
+import {createGenericHttpWebServiceClient} from './js/weburg/ghowst/generic-http-web-service-client.js';
+
 let httpWebService = createGenericHttpWebServiceClient("http://localhost:8081/generichttpws");
 
 // Create

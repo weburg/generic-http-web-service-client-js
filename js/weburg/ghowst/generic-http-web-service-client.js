@@ -1,7 +1,7 @@
-"use strict";
+import {HttpWebServiceInvoker} from './http-web-service-invoker.js';
 
 // Thin wrapper for stubless client
-function createGenericHttpWebServiceClient(baseUrl) {
+export function createGenericHttpWebServiceClient(baseUrl) {
     let handler = {
         get: function(target, name) {
             return function() {

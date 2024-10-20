@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <title>JS+HTML Generic HTTP WS Client</title>
     <link rel="stylesheet" href="css/main.css">
-    <script type="text/javascript" src="js/weburg/ghowst/http-web-service-invoker.js"></script>
-    <script type="text/javascript" src="js/weburg/ghowst/generic-http-web-service-client.js"></script>
 
-    <script>
+    <script type="module">
+        import {createGenericHttpWebServiceClient} from './js/weburg/ghowst/generic-http-web-service-client.js';
+
         let httpWebService = createGenericHttpWebServiceClient("http://localhost:8081/generichttpws");
 
         /*** Photo ***/

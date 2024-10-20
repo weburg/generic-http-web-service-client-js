@@ -1,6 +1,4 @@
-"use strict";
-
-function HttpWebServiceInvoker() {
+export function HttpWebServiceInvoker() {
     function getEntityName(name, verb) {
         return name.substring(verb.length, name.length).toLowerCase();
     }

@@ -55,4 +55,4 @@ in a local Web server in your browser:
 `run-example-generic-http-web-service-client.html`
 
 The example runs several calls to create, update, replace, read, delete, and do
-a custom action on resource.
+a custom action on resources.

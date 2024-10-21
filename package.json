@@ -2,13 +2,9 @@
   "name": "generic-http-web-service-client",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "run-example-generic-http-web-service-client.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/weburg/generic-http-web-service-client-js.git"
   },
   "private": true,
   "type": "module",

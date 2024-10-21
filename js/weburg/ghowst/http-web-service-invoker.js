@@ -1,3 +1,7 @@
+import FormData from "form-data"; // Node.js only
+import _XMLHttpRequest from "xmlhttprequest2"; // Node.js only
+let XMLHttpRequest = _XMLHttpRequest.XMLHttpRequest // Node.js only
+
 export function HttpWebServiceInvoker() {
     function getEntityName(name, verb) {
         return name.substring(verb.length, name.length).toLowerCase();

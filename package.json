@@ -1,0 +1,19 @@
+{
+  "name": "generic-http-web-service-client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/weburg/generic-http-web-service-client-js.git"
+  },
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "form-data": "^4.0.1",
+    "xmlhttprequest2": "^1.0.1"
+  }
+}

@@ -11,10 +11,13 @@
   local objects.
 
 > [!NOTE]
-> This JavaScript project is meant to run in a browser. It uses XHR instead of
-> the Fetch API for now. However, once using the Fetch API, or with an XHR
-> wrapper, it should run in Node.js without too much effort and still work in a
-> browser. As of this writing, Node.js's stable Fetch support isn't ubiquitous.
+> This JavaScript project primarily runs in a browser. It currently uses XHR
+> instead of the Fetch API. However, once using the Fetch API, it should run in
+> Node.js without too much effort and still work in a browser. As of this
+> writing, Node.js's stable Fetch and ES6 modules support isn't ubiquitous, as
+> (for example) Ubuntu 22.04 LTS comes with Node.js 12. An effort was made to
+> get this project working with that version of Node.js in the nodejs branch.
+> However, future effort will likely focus on Node.js 21+.
 
 ### Example code
 
@@ -46,7 +49,7 @@ If using the CLI, ensure you are in the project directory. Run:
 
 Now, in a browser, navigate to http://localhost:8080/run-example-generic-http-web-service-client.html
 
-If using an IDE, you should only need to run the below file which should open
+If using an IDE, you should only need to run the below file which ideally opens
 in a local Web server in your browser:
 
 `run-example-generic-http-web-service-client.html`

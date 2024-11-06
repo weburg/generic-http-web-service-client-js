@@ -22,9 +22,9 @@
 ### Example code
 
 ```js
-import {createGenericHttpWebServiceClient} from './js/weburg/ghowst/generic-http-web-service-client.js';
+import {GenericHttpWebServiceClient} from './js/weburg/ghowst/generic-http-web-service-client.js';
 
-let httpWebService = createGenericHttpWebServiceClient("http://localhost:8081/generichttpws");
+let httpWebService = new GenericHttpWebServiceClient("http://localhost:8081/generichttpws");
 
 // Create
 let engine = {
@@ -32,7 +32,7 @@ let engine = {
     cylinders: 44,
     throttleSetting: 49
 }
-let engineId = httpWebService.createEngines(engine);
+let engineId1 = httpWebService.createEngines({engine: engine});
 ```
 
 ### Running the example

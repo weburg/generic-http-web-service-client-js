@@ -3,6 +3,10 @@ export function HttpWebServiceInvoker() {
         return name.substring(verb.length, name.length).toLowerCase();
     }
 
+    function generateQs(myArguments) {
+        return (myArguments.length > 0 ? '?' + new URLSearchParams(myArguments[0]).toString() : "");
+    }
+
     this.invoke = function(methodName, myArguments, baseUrl) {
         let verb;
         let entity;
@@ -39,8 +43,8 @@ export function HttpWebServiceInvoker() {
         switch (verb) {
             case "get":
                 xhr = new XMLHttpRequest();
-                xhr.open("GET", baseUrl + '/' + entity + (myArguments !== undefined && myArguments.length > 0 ?
-                    "?id=" + encodeURIComponent(myArguments[0]) : ""), false);
+                xhr.open("GET", baseUrl + '/' + entity + generateQs(myArguments), false);
+                xhr.setRequestHeader("accept", "application/json");
                 xhr.send(null);
 
                 response = JSON.parse(xhr.responseText);
@@ -49,12 +53,17 @@ export function HttpWebServiceInvoker() {
             case "create":
                 formData = new FormData();
 
-                for (let property in myArguments[0]) {
-                    formData.append(property, myArguments[0][property]);
+                for (let arg in myArguments) {
+                    for (let namedArgument in myArguments[arg]) {
+                        for (let property in myArguments[arg][namedArgument]) {
+                            formData.append(property, myArguments[arg][namedArgument][property]);
+                        }
+                    }
                 }
 
                 xhr = new XMLHttpRequest();
                 xhr.open("POST", baseUrl + '/' + entity, false);
+                xhr.setRequestHeader("accept", "application/json");
                 xhr.send(formData);
 
                 response = JSON.parse(xhr.responseText);
@@ -63,12 +72,17 @@ export function HttpWebServiceInvoker() {
             case "createOrReplace":
                 formData = new FormData();
 
-                for (let property in myArguments[0]) {
-                    formData.append(property, myArguments[0][property]);
+                for (let arg in myArguments) {
+                    for (let namedArgument in myArguments[arg]) {
+                        for (let property in myArguments[arg][namedArgument]) {
+                            formData.append(property, myArguments[arg][namedArgument][property]);
+                        }
+                    }
                 }
 
                 xhr = new XMLHttpRequest();
-                xhr.open("PUT", baseUrl + '/' + entity + "?id=" + encodeURIComponent(myArguments[0]["id"]), false);
+                xhr.open("PUT", baseUrl + '/' + entity, false);
+                xhr.setRequestHeader("accept", "application/json");
                 xhr.send(formData);
 
                 response = JSON.parse(xhr.responseText);
@@ -77,31 +91,39 @@ export function HttpWebServiceInvoker() {
             case "update":
                 formData = new FormData();
 
-                for (let property in myArguments[0]) {
-                    formData.append(property, myArguments[0][property]);
+                for (let arg in myArguments) {
+                    for (let namedArgument in myArguments[arg]) {
+                        for (let property in myArguments[arg][namedArgument]) {
+                            formData.append(property, myArguments[arg][namedArgument][property]);
+                        }
+                    }
                 }
 
                 xhr = new XMLHttpRequest();
-                xhr.open("PATCH", baseUrl + '/' + entity + "?id=" + encodeURIComponent(myArguments[0]["id"]), false);
+                xhr.open("PATCH", baseUrl + '/' + entity + generateQs(myArguments), false);
+                xhr.setRequestHeader("accept", "application/json");
                 xhr.send(formData);
 
                 return;
             case "delete":
                 xhr = new XMLHttpRequest();
-                xhr.open("DELETE", baseUrl + '/' + entity + "?id=" + encodeURIComponent(myArguments[0]), false);
+                xhr.open("DELETE", baseUrl + '/' + entity + generateQs(myArguments), false);
+                xhr.setRequestHeader("accept", "application/json");
                 xhr.send(null);
 
                 return;
             default:
                 formData = new FormData();
 
-                for (let property in myArguments[0]) {
-                    formData.append(property, myArguments[0][property]);
+                for (let arg in myArguments) {
+                    for (let namedArgument in myArguments[arg]) {
+                        formData.append(namedArgument, myArguments[arg][namedArgument]);
+                    }
                 }
 
                 xhr = new XMLHttpRequest();
-                xhr.open("POST", baseUrl + '/' + entity + '/' + verb + (myArguments !== undefined && myArguments.length > 0 ?
-                    "?id=" + encodeURIComponent(myArguments[0]) : ""), false); // TODO we assume id is passed but need to detect that more proper, custom verbs might pass different things
+                xhr.open("POST", baseUrl + '/' + entity + '/' + verb, false);
+                xhr.setRequestHeader("accept", "application/json");
                 xhr.send(formData);
 
                 return;

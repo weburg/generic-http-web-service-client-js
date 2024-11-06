@@ -3,7 +3,7 @@ export function HttpWebServiceInvoker() {
         return name.substring(verb.length, name.length).toLowerCase();
     }
 
-    this.invoke = function(methodName, myArguments, baseUrl) {
+    this.invoke = async function(methodName, myArguments, baseUrl) {
         let verb;
         let entity;
 
@@ -32,20 +32,20 @@ export function HttpWebServiceInvoker() {
         console.log("Verb: " + verb);
         console.log("Entity: " + entity);
 
-        let xhr;
+        let request;
         let response;
         let formData;
 
         switch (verb) {
             case "get":
-                xhr = new XMLHttpRequest();
-                xhr.open("GET", baseUrl + '/' + entity + (myArguments !== undefined && myArguments.length > 0 ?
-                    "?id=" + encodeURIComponent(myArguments[0]) : ""), false);
-                xhr.send(null);
+                request = {
+                    method: "GET"
+                }
 
-                response = JSON.parse(xhr.responseText);
+                response = await fetch(baseUrl + '/' + entity + (myArguments !== undefined && myArguments.length > 0 ?
+                    "?id=" + encodeURIComponent(myArguments[0]) : ""), request);
 
-                return response;
+                return await response.json();
             case "create":
                 formData = new FormData();
 
@@ -53,13 +53,14 @@ export function HttpWebServiceInvoker() {
                     formData.append(property, myArguments[0][property]);
                 }
 
-                xhr = new XMLHttpRequest();
-                xhr.open("POST", baseUrl + '/' + entity, false);
-                xhr.send(formData);
+                request = {
+                    method: "POST",
+                    body: formData
+                }
 
-                response = JSON.parse(xhr.responseText);
+                response = await fetch(baseUrl + '/' + entity, request);
 
-                return response;
+                return await response.json();
             case "createOrReplace":
                 formData = new FormData();
 
@@ -67,13 +68,14 @@ export function HttpWebServiceInvoker() {
                     formData.append(property, myArguments[0][property]);
                 }
 
-                xhr = new XMLHttpRequest();
-                xhr.open("PUT", baseUrl + '/' + entity + "?id=" + encodeURIComponent(myArguments[0]["id"]), false);
-                xhr.send(formData);
+                request = {
+                    method: "PUT",
+                    body: formData
+                }
 
-                response = JSON.parse(xhr.responseText);
+                response = await fetch(baseUrl + '/' + entity + "?id=" + encodeURIComponent(myArguments[0]["id"]), request);
 
-                return response;
+                return await response.json();
             case "update":
                 formData = new FormData();
 
@@ -81,17 +83,22 @@ export function HttpWebServiceInvoker() {
                     formData.append(property, myArguments[0][property]);
                 }
 
-                xhr = new XMLHttpRequest();
-                xhr.open("PATCH", baseUrl + '/' + entity + "?id=" + encodeURIComponent(myArguments[0]["id"]), false);
-                xhr.send(formData);
+                request = {
+                    method: "PATCH",
+                    body: formData
+                }
 
-                return;
+                response = await fetch(baseUrl + '/' + entity + "?id=" + encodeURIComponent(myArguments[0]["id"]), request);
+
+                return await response.json();
             case "delete":
-                xhr = new XMLHttpRequest();
-                xhr.open("DELETE", baseUrl + '/' + entity + "?id=" + encodeURIComponent(myArguments[0]), false);
-                xhr.send(null);
+                request = {
+                    method: "DELETE"
+                }
 
-                return;
+                response = await fetch(baseUrl + '/' + entity + "?id=" + encodeURIComponent(myArguments[0]), request);
+
+                return response.json();
             default:
                 formData = new FormData();
 
@@ -99,10 +106,8 @@ export function HttpWebServiceInvoker() {
                     formData.append(property, myArguments[0][property]);
                 }
 
-                xhr = new XMLHttpRequest();
-                xhr.open("POST", baseUrl + '/' + entity + '/' + verb + (myArguments !== undefined && myArguments.length > 0 ?
-                    "?id=" + encodeURIComponent(myArguments[0]) : ""), false); // TODO we assume id is passed but need to detect that more proper, custom verbs might pass different things
-                xhr.send(formData);
+                response = await fetch(baseUrl + '/' + entity + '/' + verb + (myArguments !== undefined
+                    && myArguments.length > 0 ? "?id=" + encodeURIComponent(myArguments[0]) : ""), request);  // TODO we assume id is passed but need to detect that more proper, custom verbs might pass different things
 
                 return;
         }

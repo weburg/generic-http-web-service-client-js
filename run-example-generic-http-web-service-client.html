@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JS+HTML Generic HTTP WS Client</title>
     <link rel="stylesheet" href="css/main.css">
-
     <script type="module">
         import {GenericHttpWebServiceClient} from './js/weburg/ghowst/generic-http-web-service-client.js';
 
@@ -104,6 +104,6 @@
 
 <p>View console for client calls to the Web service.</p>
 
-<p>To trigger createPhoto: <input type="file" name="photoFile" onchange="window.handlePhotoUpload(this.files)" accept=".gif,.jpg,.jpeg,.png"></p>
+<p>To trigger createPhoto: <input type="file" name="photoFile" title="Photo file" onchange="window.handlePhotoUpload(this.files)" accept=".gif,.jpg,.jpeg,.png"></p>
 </body>
 </html>

@@ -43,7 +43,10 @@ export function HttpWebServiceInvoker() {
         switch (verb) {
             case "get":
                 request = {
-                    method: "GET"
+                    method: "GET",
+                    headers: {
+                        accept: "application/json"
+                    }
                 }
 
                 response = await fetch(baseUrl + '/' + entity + generateQs(myArguments), request);
@@ -62,6 +65,9 @@ export function HttpWebServiceInvoker() {
 
                 request = {
                     method: "POST",
+                    headers: {
+                        accept: "application/json"
+                    },
                     body: formData
                 }
 
@@ -81,6 +87,9 @@ export function HttpWebServiceInvoker() {
 
                 request = {
                     method: "PUT",
+                    headers: {
+                        accept: "application/json"
+                    },
                     body: formData
                 }
 
@@ -100,20 +109,26 @@ export function HttpWebServiceInvoker() {
 
                 request = {
                     method: "PATCH",
+                    headers: {
+                        accept: "application/json"
+                    },
                     body: formData
                 }
 
                 response = await fetch(baseUrl + '/' + entity + generateQs(myArguments), request);
 
-                return await response.json();
+                return;
             case "delete":
                 request = {
-                    method: "DELETE"
+                    method: "DELETE",
+                    headers: {
+                        accept: "application/json"
+                    }
                 }
 
                 response = await fetch(baseUrl + '/' + entity + generateQs(myArguments), request);
 
-                return response.json();
+                return;
             default:
                 formData = new FormData();
 
@@ -125,6 +140,9 @@ export function HttpWebServiceInvoker() {
 
                 request = {
                     method: "POST",
+                    headers: {
+                        accept: "application/json"
+                    },
                     body: formData
                 }
 

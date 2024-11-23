@@ -3,6 +3,10 @@ export function HttpWebServiceInvoker() {
         return name.substring(verb.length, name.length).toLowerCase();
     }
 
+    function generateQs(myArguments) {
+        return (myArguments.length > 0 ? '?' + new URLSearchParams(myArguments[0]).toString() : "");
+    }
+
     this.invoke = async function(methodName, myArguments, baseUrl) {
         let verb;
         let entity;
@@ -42,15 +46,18 @@ export function HttpWebServiceInvoker() {
                     method: "GET"
                 }
 
-                response = await fetch(baseUrl + '/' + entity + (myArguments !== undefined && myArguments.length > 0 ?
-                    "?id=" + encodeURIComponent(myArguments[0]) : ""), request);
+                response = await fetch(baseUrl + '/' + entity + generateQs(myArguments), request);
 
                 return await response.json();
             case "create":
                 formData = new FormData();
 
-                for (let property in myArguments[0]) {
-                    formData.append(property, myArguments[0][property]);
+                for (let arg in myArguments) {
+                    for (let namedArgument in myArguments[arg]) {
+                        for (let property in myArguments[arg][namedArgument]) {
+                            formData.append(property, myArguments[arg][namedArgument][property]);
+                        }
+                    }
                 }
 
                 request = {
@@ -64,8 +71,12 @@ export function HttpWebServiceInvoker() {
             case "createOrReplace":
                 formData = new FormData();
 
-                for (let property in myArguments[0]) {
-                    formData.append(property, myArguments[0][property]);
+                for (let arg in myArguments) {
+                    for (let namedArgument in myArguments[arg]) {
+                        for (let property in myArguments[arg][namedArgument]) {
+                            formData.append(property, myArguments[arg][namedArgument][property]);
+                        }
+                    }
                 }
 
                 request = {
@@ -73,14 +84,18 @@ export function HttpWebServiceInvoker() {
                     body: formData
                 }
 
-                response = await fetch(baseUrl + '/' + entity + "?id=" + encodeURIComponent(myArguments[0]["id"]), request);
+                response = await fetch(baseUrl + '/' + entity, request);
 
                 return await response.json();
             case "update":
                 formData = new FormData();
 
-                for (let property in myArguments[0]) {
-                    formData.append(property, myArguments[0][property]);
+                for (let arg in myArguments) {
+                    for (let namedArgument in myArguments[arg]) {
+                        for (let property in myArguments[arg][namedArgument]) {
+                            formData.append(property, myArguments[arg][namedArgument][property]);
+                        }
+                    }
                 }
 
                 request = {
@@ -88,7 +103,7 @@ export function HttpWebServiceInvoker() {
                     body: formData
                 }
 
-                response = await fetch(baseUrl + '/' + entity + "?id=" + encodeURIComponent(myArguments[0]["id"]), request);
+                response = await fetch(baseUrl + '/' + entity + generateQs(myArguments), request);
 
                 return await response.json();
             case "delete":
@@ -96,18 +111,24 @@ export function HttpWebServiceInvoker() {
                     method: "DELETE"
                 }
 
-                response = await fetch(baseUrl + '/' + entity + "?id=" + encodeURIComponent(myArguments[0]), request);
+                response = await fetch(baseUrl + '/' + entity + generateQs(myArguments), request);
 
                 return response.json();
             default:
                 formData = new FormData();
 
-                for (let property in myArguments[0]) {
-                    formData.append(property, myArguments[0][property]);
+                for (let arg in myArguments) {
+                    for (let namedArgument in myArguments[arg]) {
+                        formData.append(namedArgument, myArguments[arg][namedArgument]);
+                    }
                 }
 
-                response = await fetch(baseUrl + '/' + entity + '/' + verb + (myArguments !== undefined
-                    && myArguments.length > 0 ? "?id=" + encodeURIComponent(myArguments[0]) : ""), request);  // TODO we assume id is passed but need to detect that more proper, custom verbs might pass different things
+                request = {
+                    method: "POST",
+                    body: formData
+                }
+
+                response = await fetch(baseUrl + '/' + entity + '/' + verb, request);
 
                 return;
         }

@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JS+HTML Generic HTTP WS Client</title>
     <link rel="stylesheet" href="css/main.css">
-
     <script type="module">
-        import {createGenericHttpWebServiceClient} from './js/weburg/ghowst/generic-http-web-service-client.js';
+        import {GenericHttpWebServiceClient} from './js/weburg/ghowst/generic-http-web-service-client.js';
 
-        let httpWebService = createGenericHttpWebServiceClient("http://localhost:8081/generichttpws");
+        let httpWebService = new GenericHttpWebServiceClient("http://localhost:8081/generichttpws");
 
         /*** Photo ***/
 
@@ -18,8 +18,9 @@
                 caption: "Some JS K",
                 photoFile: files[0]
             }
-            httpWebService.createPhotos(photo);
+            httpWebService.createPhotos({photo: photo});
         }
+        window.handlePhotoUpload = handlePhotoUpload;
 
         /*** Engine ***/
 
@@ -31,7 +32,7 @@
             cylinders: 44,
             throttleSetting: 49
         }
-        let engineId1 = httpWebService.createEngines(engine);
+        let engineId1 = httpWebService.createEngines({engine: engine});
 
         // CreateOrReplace (which will create)
         engine = {
@@ -40,7 +41,7 @@
             cylinders: 45,
             throttleSetting: 50
         }
-        httpWebService.createOrReplaceEngines(engine);
+        httpWebService.createOrReplaceEngines({engine: engine});
 
         // Prepare for CreateOrReplace
         engine = {
@@ -48,7 +49,7 @@
             cylinders: 44,
             throttleSetting: 49
         }
-        let engineId2 = httpWebService.createEngines(engine);
+        let engineId2 = httpWebService.createEngines({engine: engine});
 
         // CreateOrReplace (which will replace)
         engine = {
@@ -57,7 +58,7 @@
             cylinders: 56,
             throttleSetting: 59
         }
-        httpWebService.createOrReplaceEngines(engine);
+        httpWebService.createOrReplaceEngines({engine: engine});
 
         // Prepare for Update
         engine = {
@@ -65,17 +66,17 @@
             cylinders: 44,
             throttleSetting: 49
         }
-        let engineId3 = httpWebService.createEngines(engine);
+        let engineId3 = httpWebService.createEngines({engine: engine});
 
         // Update
         engine = {
             id: engineId3,
             name: "JSEngine3Updated",
         }
-        httpWebService.updateEngines(engine);
+        httpWebService.updateEngines({engine: engine});
 
         // Get
-        engine = httpWebService.getEngines(engineId1);
+        engine = httpWebService.getEngines({id: engineId1});
         console.log("Engine returned: " + engine.name);
 
         // Get all
@@ -88,13 +89,13 @@
             cylinders: 89,
             throttleSetting: 70
         }
-        let engineId4 = httpWebService.createEngines(engine);
+        let engineId4 = httpWebService.createEngines({id: engine});
 
         // Delete
-        httpWebService.deleteEngines(engineId4);
+        httpWebService.deleteEngines({id: engineId4});
 
         // Custom verb
-        httpWebService.restartEngines(engineId2);
+        httpWebService.restartEngines({id: engineId2});
     </script>
 </head>
 
@@ -103,6 +104,6 @@
 
 <p>View console for client calls to the Web service.</p>
 
-<p>To trigger createPhoto: <input type="file" name="photoFile" onchange="handlePhotoUpload(this.files)" accept=".gif,.jpg,.jpeg,.png"></p>
+<p>To trigger createPhoto: <input type="file" name="photoFile" title="Photo file" onchange="window.handlePhotoUpload(this.files)" accept=".gif,.jpg,.jpeg,.png"></p>
 </body>
 </html>

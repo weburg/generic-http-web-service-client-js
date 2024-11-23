@@ -1,17 +1,16 @@
-import {createGenericHttpWebServiceClient} from './js/weburg/ghowst/generic-http-web-service-client.js';
+import {GenericHttpWebServiceClient} from './js/weburg/ghowst/generic-http-web-service-client.js';
+import {openAsBlob} from 'node:fs'
 
-let httpWebService = createGenericHttpWebServiceClient("http://localhost:8081/generichttpws");
+let httpWebService = new GenericHttpWebServiceClient("http://localhost:8081/generichttpws");
 
 /*** Photo ***/
 
 // Create
-function handlePhotoUpload(files) {
-    let photo = {
-        caption: "Some JS-N K",
-        photoFile: files[0]
-    }
-    httpWebService.createPhotos(photo);
+let photo = {
+    caption: "Some JS-N K",
+    photoFile: new File([await openAsBlob("nodejs.jpg")], "nodejs.jpg")
 }
+httpWebService.createPhotos({photo: photo});
 
 /*** Engine ***/
 
@@ -23,7 +22,7 @@ engine = {
     cylinders: 44,
     throttleSetting: 49
 }
-let engineId1 = httpWebService.createEngines(engine);
+let engineId1 = await httpWebService.createEngines({engine: engine});
 
 // CreateOrReplace (which will create)
 engine = {
@@ -32,7 +31,7 @@ engine = {
     cylinders: 45,
     throttleSetting: 50
 }
-httpWebService.createOrReplaceEngines(engine);
+httpWebService.createOrReplaceEngines({engine: engine});
 
 // Prepare for CreateOrReplace
 engine = {
@@ -40,7 +39,7 @@ engine = {
     cylinders: 44,
     throttleSetting: 49
 }
-let engineId2 = httpWebService.createEngines(engine);
+let engineId2 = await httpWebService.createEngines({engine: engine});
 
 // CreateOrReplace (which will replace)
 engine = {
@@ -49,7 +48,7 @@ engine = {
     cylinders: 56,
     throttleSetting: 59
 }
-httpWebService.createOrReplaceEngines(engine);
+httpWebService.createOrReplaceEngines({engine: engine});
 
 // Prepare for Update
 engine = {
@@ -57,21 +56,21 @@ engine = {
     cylinders: 44,
     throttleSetting: 49
 }
-let engineId3 = httpWebService.createEngines(engine);
+let engineId3 = await httpWebService.createEngines({engine: engine});
 
 // Update
 engine = {
     id: engineId3,
     name: "JS-NEngine3Updated",
 }
-httpWebService.updateEngines(engine);
+httpWebService.updateEngines({engine: engine});
 
 // Get
-engine = httpWebService.getEngines(engineId1);
+engine = await httpWebService.getEngines({id: engineId1});
 console.log("Engine returned: " + engine.name);
 
 // Get all
-let engines = httpWebService.getEngines();
+let engines = await httpWebService.getEngines();
 console.log("Engines returned: " + engines.length);
 
 // Prepare for delete
@@ -80,10 +79,10 @@ engine = {
     cylinders: 89,
     throttleSetting: 70
 }
-let engineId4 = httpWebService.createEngines(engine);
+let engineId4 = await httpWebService.createEngines({engine: engine});
 
 // Delete
-httpWebService.deleteEngines(engineId4);
+httpWebService.deleteEngines({id: engineId4});
 
 // Custom verb
-httpWebService.restartEngines(engineId2);
+httpWebService.restartEngines({id: engineId2});

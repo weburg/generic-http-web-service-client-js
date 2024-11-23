@@ -32,7 +32,7 @@
             cylinders: 44,
             throttleSetting: 49
         }
-        let engineId1 = httpWebService.createEngines({engine: engine});
+        let engineId1 = await httpWebService.createEngines({engine: engine});
 
         // CreateOrReplace (which will create)
         engine = {
@@ -49,7 +49,7 @@
             cylinders: 44,
             throttleSetting: 49
         }
-        let engineId2 = httpWebService.createEngines({engine: engine});
+        let engineId2 = await httpWebService.createEngines({engine: engine});
 
         // CreateOrReplace (which will replace)
         engine = {
@@ -66,7 +66,7 @@
             cylinders: 44,
             throttleSetting: 49
         }
-        let engineId3 = httpWebService.createEngines({engine: engine});
+        let engineId3 = await httpWebService.createEngines({engine: engine});
 
         // Update
         engine = {
@@ -76,11 +76,11 @@
         httpWebService.updateEngines({engine: engine});
 
         // Get
-        engine = httpWebService.getEngines({id: engineId1});
+        engine = await httpWebService.getEngines({id: engineId1});
         console.log("Engine returned: " + engine.name);
 
         // Get all
-        let engines = httpWebService.getEngines();
+        let engines = await httpWebService.getEngines();
         console.log("Engines returned: " + engines.length);
 
         // Prepare for delete
@@ -89,7 +89,7 @@
             cylinders: 89,
             throttleSetting: 70
         }
-        let engineId4 = httpWebService.createEngines({id: engine});
+        let engineId4 = await httpWebService.createEngines({engine: engine});
 
         // Delete
         httpWebService.deleteEngines({id: engineId4});

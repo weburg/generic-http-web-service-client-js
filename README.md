@@ -11,13 +11,13 @@
   local objects.
 
 > [!NOTE]
-> This JavaScript project primarily runs in a browser. It currently uses XHR
-> instead of the Fetch API. However, once using the Fetch API, it should run in
-> Node.js without too much effort and still work in a browser. As of this
-> writing, Node.js's stable Fetch and ES6 modules support isn't ubiquitous, as
-> (for example) Ubuntu 22.04 LTS comes with Node.js 12. An effort was made to
-> get this project working with that version of Node.js in the nodejs branch.
-> However, future effort will likely focus on Node.js 21+.
+> This JavaScript project runs in both the browser as well as Node.js. It uses
+> the Fetch API as well as ES6 modules and FormData, so the code is nearly
+> identical between both environments on modern browsers and versions of Node.js
+> greater than or equal to version 21. The only difference is how a File is
+> obtained when sending files. As of this writing, Node.js's stable Fetch API
+> and ES6 modules support aren't ubiquitous, as (for example) Ubuntu 22.04 LTS
+> comes with Node.js 12. Be sure to use the latest version of Node.js.
 
 ### Example code
 
@@ -32,16 +32,20 @@ let engine = {
     cylinders: 44,
     throttleSetting: 49
 }
-let engineId1 = httpWebService.createEngines({engine: engine});
+let engineId1 = await httpWebService.createEngines({engine: engine});
 ```
 
 ### Running the example
 
 First, ensure the server is running. Refer to other grouped GHoWSt projects to
-get and run the server. For running the browser example, it should serve from a
-local Web server. On the CLI, you can install Node.js and npm, and then install
-the http-server npm package globally (with the -g flag). Or, your IDE may have
-a local Web server built in.
+get and run the server.
+
+#### Browser
+
+For running the browser example, it should serve from a local Web server. On the
+CLI, you can install Node.js and npm, and then install the http-server npm
+package globally (with the -g flag). Or, your IDE may have a local Web server
+built in.
 
 If using the CLI, ensure you are in the project directory. Run:
 
@@ -53,6 +57,18 @@ If using an IDE, you should only need to run the below file which ideally opens
 in a local Web server in your browser:
 
 `run-example-generic-http-web-service-client.html`
+
+#### Node.js
+
+Ensure Node.js 21 or better is installed.
+
+If using the CLI, ensure you are in the project directory. Run:
+
+`node run-example-generic-http-web-service-client.js`
+
+If using an IDE, you should only need to run the below file:
+
+`run-example-generic-http-web-service-client.js`
 
 The example runs several calls to create, update, replace, read, delete, and do
 a custom action on resources.

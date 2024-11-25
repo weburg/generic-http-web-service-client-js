@@ -1,5 +1,10 @@
 import {GenericHttpWebServiceClient} from './js/weburg/ghowst/generic-http-web-service-client.js';
-import {openAsBlob} from 'node:fs'
+import {openAsBlob} from 'node:fs';
+import {basename} from 'node:path';
+
+async function getFile(filepath) {
+    return new File([await openAsBlob(filepath)], basename(filepath));
+}
 
 let httpWebService = new GenericHttpWebServiceClient("http://localhost:8081/generichttpws");
 
@@ -8,7 +13,7 @@ let httpWebService = new GenericHttpWebServiceClient("http://localhost:8081/gene
 // Create
 let photo = {
     caption: "Some JS-N K",
-    photoFile: new File([await openAsBlob("nodejs.jpg")], "nodejs.jpg")
+    photoFile: await getFile("nodejs.jpg")
 }
 httpWebService.createPhotos({photo: photo});
 

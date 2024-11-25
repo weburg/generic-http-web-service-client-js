@@ -5,7 +5,7 @@
 ### Design goals
 
 - Use local language semantics to talk to the server dynamically. The only thing
-  required are the ghowst classes and a browser.
+  required are the ghowst classes and a JavaScript runtime.
 - Every call, using a method name convention to map to HTTP methods, gets
   translated to HTTP requests. Responses are parsed from JSON and mapped back to
   local objects.
@@ -38,7 +38,11 @@ let engineId1 = await httpWebService.createEngines({engine: engine});
 ### Running the example
 
 First, ensure the server is running. Refer to other grouped GHoWSt projects to
-get and run the server.
+get and run the server. Then, determine whether you want to run the .html in a
+browser, or run the corresponding .js file meant only for Node.js. Both files
+contain the same JavaScript calls, the main difference being the context and the
+manner in which they handle the example file upload. A browser requires the user
+to select a file, whereas Node.js can load a file from the local disk.
 
 #### Browser
 

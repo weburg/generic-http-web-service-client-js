@@ -91,3 +91,38 @@ httpWebService.deleteEngines({id: engineId4});
 
 // Custom verb
 httpWebService.restartEngines({id: engineId2});
+
+// Repeat, complex objects with different names
+let truck1 = {
+    name: "Ram",
+    engineId: engineId1
+}
+let truck2 = {
+    name: "Ford",
+    engineId: engineId2
+}
+let truckNameCompareResult = await httpWebService.raceTrucks({truck1: truck1, truck2: truck2});
+
+if (truckNameCompareResult === 0) {
+    throw new Error("Did not expect both trucks to have the same name.");
+}
+
+// Induce a not found error and catch it
+try {
+    engine = await httpWebService.getEngines({id: -2});
+    console.log("Engine returned: " + engine.name);
+} catch (e) {
+    if (e.name === "HttpWebServiceError") {
+        console.log("Status: " + e.httpStatus + " Message: " + e.message);
+    }
+}
+
+// Induce a service error and catch it
+try {
+    let httpWebServiceWrong = GenericHttpWebServiceClient("http://nohost:8081/generichttpws");
+    await httpWebServiceWrong.getEngines({id: -2});
+} catch (e) {
+    if (e.name === "HttpWebServiceError") {
+        console.log("Status: " + e.httpStatus + " Message: " + e.message);
+    }
+}

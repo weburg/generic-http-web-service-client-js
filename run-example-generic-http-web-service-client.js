@@ -119,7 +119,7 @@ try {
 
 // Induce a service error and catch it
 try {
-    let httpWebServiceWrong = GenericHttpWebServiceClient("http://nohost:8081/generichttpws");
+    let httpWebServiceWrong = new GenericHttpWebServiceClient("http://nohost:8081/generichttpws");
     await httpWebServiceWrong.getEngines({id: -2});
 } catch (e) {
     if (e.name === "HttpWebServiceError") {

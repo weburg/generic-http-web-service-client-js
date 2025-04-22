@@ -1,11 +1,11 @@
 import {HttpWebServiceError} from './http-web-service-error.js'
 
 export class HttpWebServiceInvoker {
-    static getEntityName(name, verb) {
+    static #getEntityName(name, verb) {
         return name.substring(verb.length, name.length).toLowerCase();
     }
 
-    static generateQs(myArguments) {
+    static #generateQs(myArguments) {
         return (myArguments.length > 0 ? '?' + new URLSearchParams(myArguments[0]).toString() : "");
     }
 
@@ -15,24 +15,24 @@ export class HttpWebServiceInvoker {
 
         if (methodName.indexOf("get") === 0) {
             verb = "get";
-            entity = HttpWebServiceInvoker.getEntityName(methodName, verb);
+            entity = HttpWebServiceInvoker.#getEntityName(methodName, verb);
         } else if (methodName.indexOf("createOrReplace") === 0) {
             verb = "createOrReplace";
-            entity = HttpWebServiceInvoker.getEntityName(methodName, verb);
+            entity = HttpWebServiceInvoker.#getEntityName(methodName, verb);
         } else if (methodName.indexOf("create") === 0) {
             verb = "create";
-            entity = HttpWebServiceInvoker.getEntityName(methodName, verb);
+            entity = HttpWebServiceInvoker.#getEntityName(methodName, verb);
         } else if (methodName.indexOf("update") === 0) {
             verb = "update";
-            entity = HttpWebServiceInvoker.getEntityName(methodName, verb);
+            entity = HttpWebServiceInvoker.#getEntityName(methodName, verb);
         } else if (methodName.indexOf("delete") === 0) {
             verb = "delete";
-            entity = HttpWebServiceInvoker.getEntityName(methodName, verb);
+            entity = HttpWebServiceInvoker.#getEntityName(methodName, verb);
         } else {
             let parts = (methodName[0].toUpperCase() + methodName.substring(1)).split(/(?=[A-Z])/);
 
             verb = parts[0].toLowerCase();
-            entity =  HttpWebServiceInvoker.getEntityName(methodName, verb);
+            entity =  HttpWebServiceInvoker.#getEntityName(methodName, verb);
         }
 
         console.log("Verb: " + verb);
@@ -52,7 +52,7 @@ export class HttpWebServiceInvoker {
                         }
                     }
 
-                    response = await fetch(baseUrl + '/' + entity + HttpWebServiceInvoker.generateQs(myArguments), request);
+                    response = await fetch(baseUrl + '/' + entity + HttpWebServiceInvoker.#generateQs(myArguments), request);
 
                     if (response.status >= 400 || response.status < 200) {
                         throw new HttpWebServiceError(response.status, response.headers.get("x-error-message"));
@@ -137,7 +137,7 @@ export class HttpWebServiceInvoker {
                         body: formData
                     }
 
-                    response = await fetch(baseUrl + '/' + entity + HttpWebServiceInvoker.generateQs(myArguments), request);
+                    response = await fetch(baseUrl + '/' + entity + HttpWebServiceInvoker.#generateQs(myArguments), request);
 
                     if (response.status >= 400 || response.status < 200) {
                         throw new HttpWebServiceError(response.status, response.headers.get("x-error-message"));
@@ -154,7 +154,7 @@ export class HttpWebServiceInvoker {
                         }
                     }
 
-                    response = await fetch(baseUrl + '/' + entity + HttpWebServiceInvoker.generateQs(myArguments), request);
+                    response = await fetch(baseUrl + '/' + entity + HttpWebServiceInvoker.#generateQs(myArguments), request);
 
                     if (response.status >= 400 || response.status < 200) {
                         throw new HttpWebServiceError(response.status, response.headers.get("x-error-message"));

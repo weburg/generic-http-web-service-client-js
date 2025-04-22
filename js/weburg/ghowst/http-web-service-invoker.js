@@ -67,7 +67,7 @@ export class HttpWebServiceInvoker {
                     for (let arg in myArguments) {
                         for (let namedArgument in myArguments[arg]) {
                             for (let property in myArguments[arg][namedArgument]) {
-                                formData.append(property, myArguments[arg][namedArgument][property]);
+                                formData.append(namedArgument + '.' + property, myArguments[arg][namedArgument][property]);
                             }
                         }
                     }
@@ -96,7 +96,7 @@ export class HttpWebServiceInvoker {
                     for (let arg in myArguments) {
                         for (let namedArgument in myArguments[arg]) {
                             for (let property in myArguments[arg][namedArgument]) {
-                                formData.append(property, myArguments[arg][namedArgument][property]);
+                                formData.append(namedArgument + '.' + property, myArguments[arg][namedArgument][property]);
                             }
                         }
                     }
@@ -124,7 +124,7 @@ export class HttpWebServiceInvoker {
                     for (let arg in myArguments) {
                         for (let namedArgument in myArguments[arg]) {
                             for (let property in myArguments[arg][namedArgument]) {
-                                formData.append(property, myArguments[arg][namedArgument][property]);
+                                formData.append(namedArgument + '.' + property, myArguments[arg][namedArgument][property]);
                             }
                         }
                     }

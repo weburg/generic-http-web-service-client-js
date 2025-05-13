@@ -137,7 +137,7 @@ export class HttpWebServiceInvoker {
                         body: formData
                     }
 
-                    response = await fetch(baseUrl + '/' + entity + HttpWebServiceInvoker.#generateQs(myArguments), request);
+                    response = await fetch(baseUrl + '/' + entity, request);
 
                     if (response.status >= 400 || response.status < 200) {
                         throw new HttpWebServiceError(response.status, response.headers.get("x-error-message"));

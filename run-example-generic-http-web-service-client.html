@@ -106,11 +106,9 @@
             name: "Ford",
             engineId: engineId2
         }
-        let truckNameCompareResult = await httpWebService.raceTrucks({truck1: truck1, truck2: truck2});
+        let truckResult = await httpWebService.raceTrucks({truck1: truck1, truck2: truck2});
 
-        if (truckNameCompareResult === 0) {
-            throw new Error("Did not expect both trucks to have the same name.");
-        }
+        console.log("Race result:" + truckResult);
 
         // Induce a not found error and catch it
         try {

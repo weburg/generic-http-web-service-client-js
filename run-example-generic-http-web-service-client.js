@@ -103,7 +103,7 @@ let truck2 = {
 }
 let truckResult = await httpWebService.raceTrucks({truck1: truck1, truck2: truck2});
 
-console.log("Race result:" + truckResult);
+console.log("Race result: " + truckResult);
 
 // Induce a not found error and catch it
 try {

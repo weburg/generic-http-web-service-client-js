@@ -10,17 +10,17 @@
 
         let httpWebService = new GenericHttpWebServiceClient("http://localhost:8081/generichttpws");
 
-        /*** Photo ***/
+        /*** Image ***/
 
         // Create
-        function handlePhotoUpload(files) {
-            let photo = {
+        function handleImageUpload(files) {
+            let image = {
                 caption: "Some JS K",
-                photoFile: files[0]
+                imageFile: files[0]
             }
-            httpWebService.createPhotos({photo: photo});
+            httpWebService.createImages({image: image});
         }
-        window.handlePhotoUpload = handlePhotoUpload;
+        window.handleImageUpload = handleImageUpload;
 
         /*** Engine ***/
 
@@ -133,10 +133,10 @@
 </head>
 
 <body>
-<h1>JS+HTML Generic HTTP WS Client</h1>
+<h1>Generic HTTP Web Service Client in JS (GHoWSt)</h1>
 
 <p>View console for client calls to the Web service.</p>
 
-<p>To trigger createPhoto: <input type="file" name="photoFile" title="Photo file" onchange="window.handlePhotoUpload(this.files)" accept=".gif,.jpg,.jpeg,.png"></p>
+<p>To trigger createImage: <input type="file" name="imageFile" title="Image file" onchange="window.handleImageUpload(this.files)" accept="image/jpeg,image/gif,image/png,image/apng,image/avif,image/webp,image/svg+xml"></p>
 </body>
 </html>

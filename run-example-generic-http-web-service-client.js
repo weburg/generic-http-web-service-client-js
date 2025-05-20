@@ -8,14 +8,14 @@ async function getFile(filepath) {
 
 let httpWebService = new GenericHttpWebServiceClient("http://localhost:8081/generichttpws");
 
-/*** Photo ***/
+/*** Image ***/
 
 // Create
-let photo = {
+let image = {
     caption: "Some JS-N K",
-    photoFile: await getFile("nodejs.jpg")
+    imageFile: await getFile("nodejs.jpg")
 }
-httpWebService.createPhotos({photo: photo});
+httpWebService.createImages({image: image});
 
 /*** Engine ***/
 

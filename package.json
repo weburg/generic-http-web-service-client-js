@@ -1,0 +1,8 @@
+{
+  "main": "run-example-generic-http-web-service-client.js",
+  "type": "module",
+  "scripts": {
+    "test": "node --test \"tests/unit/**/test-*\"",
+    "verify": "node --test \"tests/unit/**/test-*\" && node --test \"tests/integration/**/test-*\""
+  }
+}

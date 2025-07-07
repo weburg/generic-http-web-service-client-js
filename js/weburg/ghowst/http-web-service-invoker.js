@@ -1,7 +1,7 @@
 import {HttpWebServiceError} from './http-web-service-error.js'
 
 export class HttpWebServiceInvoker {
-    static #getEntityName(name, verb) {
+    static #getResourceName(name, verb) {
         return name.substring(verb.length, name.length).toLowerCase();
     }
 
@@ -9,196 +9,117 @@ export class HttpWebServiceInvoker {
         return (myArguments.length > 0 ? '?' + new URLSearchParams(myArguments[0]).toString() : "");
     }
 
+    static async #handleResponse(response) {
+        if (response.status >= 400 || response.status < 200) {
+            throw new HttpWebServiceError(response.status, response.headers.get("x-error-message"));
+        } else if (response.status >= 300 && response.status < 400) {
+            throw new HttpWebServiceError(response.status, response.headers.get("x-error-message"));
+        }
+
+        try {
+            return await response.json();
+        } catch (e) {
+            return;
+        }
+    }
+
+    static #formDataFromArguments(myArguments) {
+        let formData = new FormData();
+
+        for (let arg in myArguments) {
+            for (let namedArgument in myArguments[arg]) {
+                if (typeof myArguments[arg][namedArgument] !== 'object') {
+                    formData.append(namedArgument, myArguments[arg][namedArgument]);
+                } else {
+                    for (let property in myArguments[arg][namedArgument]) {
+                        formData.append(namedArgument + '.' + property, myArguments[arg][namedArgument][property]);
+                    }
+                }
+            }
+        }
+
+        return formData;
+    }
+
     async invoke(methodName, myArguments, baseUrl) {
         let verb;
-        let entity;
+        let resource;
 
         if (methodName.indexOf("get") === 0) {
             verb = "get";
-            entity = HttpWebServiceInvoker.#getEntityName(methodName, verb);
+            resource = HttpWebServiceInvoker.#getResourceName(methodName, verb);
         } else if (methodName.indexOf("createOrReplace") === 0) {
             verb = "createOrReplace";
-            entity = HttpWebServiceInvoker.#getEntityName(methodName, verb);
+            resource = HttpWebServiceInvoker.#getResourceName(methodName, verb);
         } else if (methodName.indexOf("create") === 0) {
             verb = "create";
-            entity = HttpWebServiceInvoker.#getEntityName(methodName, verb);
+            resource = HttpWebServiceInvoker.#getResourceName(methodName, verb);
         } else if (methodName.indexOf("update") === 0) {
             verb = "update";
-            entity = HttpWebServiceInvoker.#getEntityName(methodName, verb);
+            resource = HttpWebServiceInvoker.#getResourceName(methodName, verb);
         } else if (methodName.indexOf("delete") === 0) {
             verb = "delete";
-            entity = HttpWebServiceInvoker.#getEntityName(methodName, verb);
+            resource = HttpWebServiceInvoker.#getResourceName(methodName, verb);
         } else {
             let parts = (methodName[0].toUpperCase() + methodName.substring(1)).split(/(?=[A-Z])/);
 
             verb = parts[0].toLowerCase();
-            entity =  HttpWebServiceInvoker.#getEntityName(methodName, verb);
+            resource =  HttpWebServiceInvoker.#getResourceName(methodName, verb);
         }
 
         console.log("Verb: " + verb);
-        console.log("Entity: " + entity);
+        console.log("Resource: " + resource);
 
-        let request;
+        let request = {
+            headers: {
+                accept: "application/json"
+            }
+        };
         let response;
-        let formData;
 
         try {
             switch (verb) {
                 case "get":
-                    request = {
-                        method: "GET",
-                        headers: {
-                            accept: "application/json"
-                        }
-                    }
+                    request.method = "GET";
 
-                    response = await fetch(baseUrl + '/' + entity + HttpWebServiceInvoker.#generateQs(myArguments), request);
+                    response = await fetch(baseUrl + '/' + resource + HttpWebServiceInvoker.#generateQs(myArguments), request);
 
-                    if (response.status >= 400 || response.status < 200) {
-                        throw new HttpWebServiceError(response.status, response.headers.get("x-error-message"));
-                    } else if (response.status >= 300 && response.status < 400) {
-                        throw new HttpWebServiceError(response.status, response.headers.get("x-error-message"));
-                    }
-
-                    return await response.json();
+                    return await HttpWebServiceInvoker.#handleResponse(response);
                 case "create":
-                    formData = new FormData();
+                    request.method = "POST";
+                    request.body = HttpWebServiceInvoker.#formDataFromArguments(myArguments);
 
-                    for (let arg in myArguments) {
-                        for (let namedArgument in myArguments[arg]) {
-                            for (let property in myArguments[arg][namedArgument]) {
-                                formData.append(namedArgument + '.' + property, myArguments[arg][namedArgument][property]);
-                            }
-                        }
-                    }
+                    response = await fetch(baseUrl + '/' + resource, request);
 
-                    request = {
-                        method: "POST",
-                        headers: {
-                            accept: "application/json"
-                        },
-                        body: formData
-                    }
-
-
-                    response = await fetch(baseUrl + '/' + entity, request);
-
-                    if (response.status >= 400 || response.status < 200) {
-                        throw new HttpWebServiceError(response.status, response.headers.get("x-error-message"));
-                    } else if (response.status >= 300 && response.status < 400) {
-                        throw new HttpWebServiceError(response.status, response.headers.get("x-error-message"));
-                    }
-
-                    return await response.json();
+                    return await HttpWebServiceInvoker.#handleResponse(response);
                 case "createOrReplace":
-                    formData = new FormData();
+                    request.method = "PUT";
+                    request.body = HttpWebServiceInvoker.#formDataFromArguments(myArguments);
 
-                    for (let arg in myArguments) {
-                        for (let namedArgument in myArguments[arg]) {
-                            for (let property in myArguments[arg][namedArgument]) {
-                                formData.append(namedArgument + '.' + property, myArguments[arg][namedArgument][property]);
-                            }
-                        }
-                    }
+                    response = await fetch(baseUrl + '/' + resource, request);
 
-                    request = {
-                        method: "PUT",
-                        headers: {
-                            accept: "application/json"
-                        },
-                        body: formData
-                    }
-
-                    response = await fetch(baseUrl + '/' + entity, request);
-
-                    if (response.status >= 400 || response.status < 200) {
-                        throw new HttpWebServiceError(response.status, response.headers.get("x-error-message"));
-                    } else if (response.status >= 300 && response.status < 400) {
-                        throw new HttpWebServiceError(response.status, response.headers.get("x-error-message"));
-                    }
-
-                    return await response.json();
+                    return await HttpWebServiceInvoker.#handleResponse(response);
                 case "update":
-                    formData = new FormData();
+                    request.method = "PATCH";
+                    request.body = HttpWebServiceInvoker.#formDataFromArguments(myArguments);
 
-                    for (let arg in myArguments) {
-                        for (let namedArgument in myArguments[arg]) {
-                            for (let property in myArguments[arg][namedArgument]) {
-                                formData.append(namedArgument + '.' + property, myArguments[arg][namedArgument][property]);
-                            }
-                        }
-                    }
+                    response = await fetch(baseUrl + '/' + resource, request);
 
-                    request = {
-                        method: "PATCH",
-                        headers: {
-                            accept: "application/json"
-                        },
-                        body: formData
-                    }
-
-                    response = await fetch(baseUrl + '/' + entity, request);
-
-                    if (response.status >= 400 || response.status < 200) {
-                        throw new HttpWebServiceError(response.status, response.headers.get("x-error-message"));
-                    } else if (response.status >= 300 && response.status < 400) {
-                        throw new HttpWebServiceError(response.status, response.headers.get("x-error-message"));
-                    }
-
-                    return;
+                    return await HttpWebServiceInvoker.#handleResponse(response);
                 case "delete":
-                    request = {
-                        method: "DELETE",
-                        headers: {
-                            accept: "application/json"
-                        }
-                    }
+                    request.method = "DELETE";
 
-                    response = await fetch(baseUrl + '/' + entity + HttpWebServiceInvoker.#generateQs(myArguments), request);
+                    response = await fetch(baseUrl + '/' + resource + HttpWebServiceInvoker.#generateQs(myArguments), request);
 
-                    if (response.status >= 400 || response.status < 200) {
-                        throw new HttpWebServiceError(response.status, response.headers.get("x-error-message"));
-                    } else if (response.status >= 300 && response.status < 400) {
-                        throw new HttpWebServiceError(response.status, response.headers.get("x-error-message"));
-                    }
-
-                    return;
+                    return await HttpWebServiceInvoker.#handleResponse(response);
                 default:
-                    formData = new FormData();
+                    // POST to a custom verb resource
+                    request.method = "POST";
+                    request.body = HttpWebServiceInvoker.#formDataFromArguments(myArguments);
 
-                    for (let arg in myArguments) {
-                        for (let namedArgument in myArguments[arg]) {
-                            if (typeof myArguments[arg][namedArgument] !== 'object') {
-                                formData.append(namedArgument, myArguments[arg][namedArgument]);
-                            } else {
-                                for (let property in myArguments[arg][namedArgument]) {
-                                    formData.append(namedArgument + '.' + property, myArguments[arg][namedArgument][property]);
-                                }
-                            }
-                        }
-                    }
+                    response = await fetch(baseUrl + '/' + resource + '/' + verb, request);
 
-                    request = {
-                        method: "POST",
-                        headers: {
-                            accept: "application/json"
-                        },
-                        body: formData
-                    }
-
-                    response = await fetch(baseUrl + '/' + entity + '/' + verb, request);
-
-                    if (response.status >= 400 || response.status < 200) {
-                        throw new HttpWebServiceError(response.status, response.headers.get("x-error-message"));
-                    } else if (response.status >= 300 && response.status < 400) {
-                        throw new HttpWebServiceError(response.status, response.headers.get("x-error-message"));
-                    }
-
-                    try {
-                        return await response.json();
-                    } catch (e) {
-                        return;
-                    }
+                    return await HttpWebServiceInvoker.#handleResponse(response);
             }
         } catch (e) {
             if (e.name === "HttpWebServiceError") {

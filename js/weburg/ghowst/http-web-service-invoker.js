@@ -67,8 +67,8 @@ export class HttpWebServiceInvoker {
             resource =  HttpWebServiceInvoker.#getResourceName(methodName, verb);
         }
 
-        console.log("Verb: " + verb);
-        console.log("Resource: " + resource);
+        console.error("Verb: " + verb);
+        console.error("Resource: " + resource);
 
         let request = {
             headers: {

@@ -69,10 +69,8 @@
         let engineId3 = await httpWebService.createEngines({engine: engine});
 
         // Update
-        engine = {
-            id: engineId3,
-            name: "JSEngine3Updated",
-        }
+        engine.id = engineId3;
+        engine.name = "JSEngine3Updated";
         httpWebService.updateEngines({engine: engine});
 
         // Get

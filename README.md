@@ -37,6 +37,12 @@ let engine = {
 let engineId1 = await httpWebService.createEngines({engine: engine});
 ```
 
+### Setup
+
+Ensure Node.js 21 or better is installed if you plan to run the Node.js example.
+Otherwise you just need a Web browser. Then, run `npm install` in the project
+root or use your IDE to install the dependencies.
+
 ### Running the example
 
 First, ensure the server is running. Refer to other grouped GHoWSt projects to

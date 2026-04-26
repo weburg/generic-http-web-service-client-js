@@ -17,9 +17,7 @@
 > the Fetch API as well as ES6 modules and FormData, so the code is nearly
 > identical between both environments on modern browsers and versions of Node.js
 > greater than or equal to version 21. The only difference is how a File is
-> obtained when sending files. As of this writing, Node.js's stable Fetch API
-> and ES6 modules support aren't ubiquitous, as (for example) Ubuntu 22.04 LTS
-> comes with Node.js 12. Be sure to use the latest version of Node.js.
+> obtained when sending files.
 
 ### Example code
 

@@ -1,7 +1,7 @@
 import assert from 'node:assert';
 import test from 'node:test';
-import {GenericHttpWebServiceClient} from '../../js/weburg/ghowst/generic-http-web-service-client.js';
-import {HttpWebServiceError} from "../../js/weburg/ghowst/http-web-service-error.js";
+import {GenericHttpWebServiceClient} from '../../scripts/weburg/ghowst/generic-http-web-service-client.js';
+import {HttpWebServiceError} from "../../scripts/weburg/ghowst/http-web-service-error.js";
 
 test('ServiceException', (t) => {
     let testService = new GenericHttpWebServiceClient("http://nohost/noservice");

@@ -1,5 +1,15 @@
 import {HttpWebServiceError} from './http-web-service-error.js'
 
+/*
+let Temporal = globalThis.Temporal;
+
+if (!Temporal) {
+    Temporal = (await import("./temporal/temporal.mjs")).Temporal;
+}
+
+export { Temporal };
+*/
+
 export class HttpWebServiceInvoker {
     static #getResourceName(name, verb) {
         return name.substring(verb.length, name.length).toLowerCase();

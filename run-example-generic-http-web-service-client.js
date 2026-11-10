@@ -1,4 +1,4 @@
-import {GenericHttpWebServiceClient} from './js/weburg/ghowst/generic-http-web-service-client.js';
+import {GenericHttpWebServiceClient} from './scripts/weburg/ghowst/generic-http-web-service-client.js';
 import {openAsBlob} from 'node:fs';
 import {basename} from 'node:path';
 

@@ -22,7 +22,7 @@
 ### Example code
 
 ```js
-import {GenericHttpWebServiceClient} from './js/weburg/ghowst/generic-http-web-service-client.js';
+import {GenericHttpWebServiceClient} from './scripts/weburg/ghowst/generic-http-web-service-client.js';
 
 let httpWebService = new GenericHttpWebServiceClient("http://localhost:8081/generichttpws");
 

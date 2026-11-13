@@ -1,4 +1,7 @@
 {
+  "name": "GHoWSt Client",
+  "version": "1.0.0",
+  "author": "Wren Weburg",
   "main": "run-example-generic-http-web-service-client.js",
   "type": "module",
   "scripts": {

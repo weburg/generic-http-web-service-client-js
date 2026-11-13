@@ -1,5 +1,5 @@
 {
-  "name": "GHoWSt Client",
+  "name": "ghowst-client",
   "version": "1.0.0",
   "author": "Wren Weburg",
   "main": "run-example-generic-http-web-service-client.js",
